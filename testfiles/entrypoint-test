@@ -1,0 +1,14 @@
+#!/bin/bash
+
+CURR_DIR=$(pwd) \
+ZLIB_LIB="$CURR_DIR/vendor/zlib/lib" \
+JPEG_LIB="$CURR_DIR/vendor/jpeg/lib" \
+PNG_LIB="$CURR_DIR/vendor/png/lib" \
+WEBP_LIB="$CURR_DIR/vendor/webp/lib" \
+IMAGE_MAGICK_LIB="$CURR_DIR/vendor/image_magick/lib" \
+LEPTONICA_LIB="$CURR_DIR/vendor/leptonica/lib" \
+TESSERACT_LIB="$CURR_DIR/vendor/tesseract/lib" \
+OPENCV_LIB="$CURR_DIR/vendor/opencv/install/lib" \
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ZLIB_LIB:$JPEG_LIB:$PNG_LIB:$WEBP_LIB:$IMAGE_MAGICK_LIB:$LEPTONICA_LIB:$TESSERACT_LIB:$OPENCV_LIB  \
+TESSDATA_PREFIX=$CURR_DIR/tesseractdata \
+node ./testfiles/app.js

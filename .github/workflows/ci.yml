@@ -1,0 +1,56 @@
+name: imagetotext CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  ubuntu:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - name: checkout resources
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install Yarn and Npm
+        run: npm install -g npm@latest yarn@latest
+
+      - name: Set permission to install_dep_ubuntu
+        run: chmod +x ./scripts/install_dep_ubuntu
+
+      - name: Install Ubuntu dependecies
+        run: bash ./scripts/install_dep_ubuntu
+
+      - name: Install cmake-js
+        run: npm install -g cmake-js
+
+      - name: Install Node dependencies
+        run: npm install
+
+      - name: Build Vendor
+        run: make build-vendor
+
+      - name: Build Project
+        run: make build
+
+      - name: Check Build
+        run: |
+          pwd
+          ls build/Release/
+      
+      - name: Set permission to entrypoint-test
+        run: chmod +x ./testfiles/entrypoint-test
+
+      - name: Run example
+        run: bash ./testfiles/entrypoint-test
