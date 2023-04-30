@@ -44,8 +44,8 @@ mkdir build && cd build && cmake -DCMAKE_INSTALL_PREFIX=$leptonica_dir \
     -DCMAKE_BUILD_TYPE="Release" \
     -DJPEG_LIBRARY_RELEASE=$jpeg_lib_dir -DJPEG_LIBRARY=$jpeg_lib_dir -DJPEG_INCLUDE_DIR=$jpeg_include_dir -DHAVE_LIBJPEG=1 \
     -DPNG_LIBRARY_RELEASE=$png_lib_dir -DPNG_LIBRARY=$png_lib_dir -DPNG_INCLUDE_DIR=$png_include_dir -DPNG_PNG_INCLUDE_DIR=$png_include_dir -DHAVE_LIBPNG=1 \
-    -DWEBP_LIBRARY_RELEASE=$webp_lib_dir -DWEBP_LIBRARY=$webp_lib_dir  -DWEBP_INCLUDE_DIR=$webp_include_dir -DHAVE_LIBWEBP=1 \
-    -DWEBPMUX_LIBRARY=$webpmux_lib_dir -DWEBPMUX_INCLUDE_DIR=$webp_include_dir -DHAVE_LIBWEBP_ANIM=1 \
+    -DWebP_LIBRARY_RELEASE=$webp_lib_dir -DWebP_LIBRARY=$webp_lib_dir  -DWebP_INCLUDE_DIR=$webp_include_dir -DHAVE_LIBWEBP=1 \
+    -DWebP_MUX_LIBRARY=$webpmux_lib_dir -DWebP_MUX_INCLUDE_DIR=$webp_include_dir -DHAVE_LIBWEBP_ANIM=1 \
     -DZLIB_LIBRARY_RELEASE=$zlib_lib_dir -DZLIB_LIBRARY=$zlib_lib_dir -DZLIB_INCLUDE_DIR=$zlib_include_dir -DHAVE_LIBZ=1 \
     -DBUILD_SHARED_LIBS=ON  ../
 
