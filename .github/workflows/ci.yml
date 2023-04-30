@@ -8,7 +8,7 @@ on:
 
 jobs:
   ubuntu:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     strategy:
       matrix:
@@ -40,9 +40,17 @@ jobs:
 
       - name: Build Vendor
         run: make build-vendor
+        shell: bash
+        env:
+          CC:   gcc-10
+          CXX:  g++-10
 
       - name: Build Project
         run: make build
+        shell: bash
+        env:
+          CC:   gcc-10
+          CXX:  g++-10
 
       - name: Check Build
         run: |
