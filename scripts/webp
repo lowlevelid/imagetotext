@@ -59,4 +59,4 @@ make install
 config_file="$webp_lib_dir/WebP/cmake/WebPConfig.cmake"
 
 replacement="$webp_lib_dir;$webp_lib_dir/libwebpdecoder.$lib_ext;$webp_lib_dir/libwebp.$lib_ext;$webp_lib_dir/libwebpdemux.$lib_ext;$webp_lib_dir/libwebpmux.$lib_ext"
-sed -i.bak '34s%webpdecoder;webp;webpdemux;webpmux%'"$replacement"'%' $config_file
+sed -i.bak '39s%webpdecoder;webp;webpdemux;webpmux%'"$replacement"'%' $config_file
