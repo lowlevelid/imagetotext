@@ -1,0 +1,49 @@
+#!/bin/bash
+
+magick_version=7.1.0
+export CURR_DIR=$(pwd)
+magick_install_dir="$CURR_DIR/vendor/image_magick"
+font_dir="/Library/Fonts/"
+
+git_url="https://github.com/ImageMagick/ImageMagick.git ImageMagick-$magick_version"
+
+rm -rf $magick_install_dir/*
+mkdir -p $magick_install_dir && cd $magick_install_dir
+git clone $git_url
+cd ImageMagick*
+
+./configure \
+    --prefix=$magick_install_dir \
+    # --with-apple-font-dir=$font_dir \
+    --disable-static \
+    --enable-shared \
+    # --enable-delegate-build \
+    --with-jp2 \
+    --with-jpeg \
+    --with-png \
+    --with-fontconfig \
+    --with-freetype \
+    --with-fftw \
+    --with-tiff \
+    --with-quantum-depth=16 \
+    --with-rsvg \
+    --with-webp \
+    --without-bzlib \
+    --without-djvu \
+    --without-dps \
+    --without-gvc \
+    --without-jbig \
+    --without-lcms \
+    --without-lcms2 \
+    --without-lqr \
+    --without-lzma \
+    --without-magick-plus-plus \
+    --without-openexr \
+    --without-pango \
+    --without-perl \
+    --without-wmf \
+    --without-x \
+    --without-xml \
+    --without-zlib
+make
+make install

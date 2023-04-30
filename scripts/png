@@ -1,0 +1,37 @@
+#!/bin/bash
+
+libpng_version=1.6.37
+export CURR_DIR=$(pwd)
+png_dir="$CURR_DIR/vendor/png"
+png_lib_dir="$CURR_DIR/vendor/png/lib"
+
+download_url="https://github.com/glennrp/libpng/archive/refs/tags/v$libpng_version.tar.gz"
+# git_url="https://github.com/glennrp/libpng.git libpng-$libpng_version"
+
+rm -rf $png_dir/*
+mkdir -p $png_dir && cd $png_dir
+# git clone $git_url
+curl -L $download_url | tar -zxf-
+cd libpng*
+
+lib_ext="so"
+
+os_type=${OSTYPE//[0-9.-]*/}
+if [[ "$os_type" == 'darwin' ]]; then
+   lib_ext='dylib'
+elif [[ "$os_type" == 'linux' ]]; then
+   lib_ext='so'
+fi
+# lib extentions
+
+zlib_dir="$CURR_DIR/vendor/zlib"
+zlib_lib_dir="$zlib_dir/lib/libz.$lib_ext"
+zlib_include_dir="$zlib_dir/include"
+
+mkdir build && cd build && cmake -DCMAKE_INSTALL_PREFIX=$png_dir \
+    -DCMAKE_BUILD_TYPE="Release" -DHAVE_LIBZ=1 \
+    -DZLIB_LIBRARY_RELEASE=$zlib_lib_dir -DZLIB_LIBRARY=$zlib_lib_dir -DZLIB_INCLUDE_DIR=$zlib_include_dir -DHAVE_LIBZ=1 \
+    -DBUILD_SHARED_LIBS=ON  ../
+
+make
+make install

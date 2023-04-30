@@ -1,0 +1,19 @@
+#!/bin/bash
+
+export CURR_DIR=$(pwd)
+
+git_url=https://github.com/tesseract-ocr/tessdata
+
+eng_data="$git_url/raw/main/eng.traineddata"
+ind_data="$git_url/raw/main/ind.traineddata"
+
+tesseractdata_dir="$CURR_DIR/tesseractdata"
+
+rm -rf $tesseractdata_dir/*
+mkdir -p $tesseractdata_dir && cd $tesseractdata_dir
+
+wget $eng_data
+wget $ind_data
+
+# export TESSDATA_PREFIX="$tesseractdata_dir/eng.traineddata"
+# echo $TESSDATA_PREFIX

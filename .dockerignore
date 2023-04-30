@@ -1,0 +1,19 @@
+# Git
+.git
+.gitignore
+
+# Node.JS
+node_modules
+
+# Docker
+.dockerignore
+docker-compose.yml
+Dockerfile
+Dockerfile.base
+
+# Jenkins
+Jenkinsfile
+
+# SonarQube
+sonar-project.properties
+

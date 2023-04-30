@@ -1,0 +1,53 @@
+#!/bin/bash
+
+libleptonica_version=1.78.0
+export CURR_DIR=$(pwd)
+leptonica_dir="$CURR_DIR/vendor/leptonica"
+leptonica_lib_dir="$CURR_DIR/vendor/leptonica/lib"
+
+git_url="https://github.com/DanBloomberg/leptonica.git libleptonica-$libleptonica_version"
+
+rm -rf $leptonica_dir/*
+mkdir -p $leptonica_dir && cd $leptonica_dir
+git clone $git_url
+cd libleptonica*
+# git checkout tags/$libleptonica_version
+
+lib_ext="so"
+
+os_type=${OSTYPE//[0-9.-]*/}
+if [[ "$os_type" == 'darwin' ]]; then
+   lib_ext='dylib'
+elif [[ "$os_type" == 'linux' ]]; then
+   lib_ext='so'
+fi
+# lib extentions
+
+jpeg_dir="$CURR_DIR/vendor/jpeg"
+jpeg_lib_dir="$jpeg_dir/lib/liblibjpeg.$lib_ext"
+jpeg_include_dir="$jpeg_dir/include"
+
+png_dir="$CURR_DIR/vendor/png"
+png_lib_dir="$png_dir/lib/libpng16.$lib_ext"
+png_include_dir="$png_dir/include/libpng16"
+
+webp_dir="$CURR_DIR/vendor/webp"
+webp_lib_dir="$webp_dir/lib/libwebp.$lib_ext"
+webpmux_lib_dir="$webp_dir/lib/libwebpmux.$lib_ext"
+webp_include_dir="$webp_dir/include"
+
+zlib_dir="$CURR_DIR/vendor/zlib"
+zlib_lib_dir="$zlib_dir/lib/libz.$lib_ext"
+zlib_include_dir="$zlib_dir/include"
+
+mkdir build && cd build && cmake -DCMAKE_INSTALL_PREFIX=$leptonica_dir \
+    -DCMAKE_BUILD_TYPE="Release" \
+    -DJPEG_LIBRARY_RELEASE=$jpeg_lib_dir -DJPEG_LIBRARY=$jpeg_lib_dir -DJPEG_INCLUDE_DIR=$jpeg_include_dir -DHAVE_LIBJPEG=1 \
+    -DPNG_LIBRARY_RELEASE=$png_lib_dir -DPNG_LIBRARY=$png_lib_dir -DPNG_INCLUDE_DIR=$png_include_dir -DPNG_PNG_INCLUDE_DIR=$png_include_dir -DHAVE_LIBPNG=1 \
+    -DWEBP_LIBRARY_RELEASE=$webp_lib_dir -DWEBP_LIBRARY=$webp_lib_dir  -DWEBP_INCLUDE_DIR=$webp_include_dir -DHAVE_LIBWEBP=1 \
+    -DWEBPMUX_LIBRARY=$webpmux_lib_dir -DWEBPMUX_INCLUDE_DIR=$webp_include_dir -DHAVE_LIBWEBP_ANIM=1 \
+    -DZLIB_LIBRARY_RELEASE=$zlib_lib_dir -DZLIB_LIBRARY=$zlib_lib_dir -DZLIB_INCLUDE_DIR=$zlib_include_dir -DHAVE_LIBZ=1 \
+    -DBUILD_SHARED_LIBS=ON  ../
+
+make
+make install

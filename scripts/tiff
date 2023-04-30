@@ -1,0 +1,59 @@
+#!/bin/bash
+
+libtiff_version=4.3.0
+export CURR_DIR=$(pwd)
+tiff_dir="$CURR_DIR/vendor/tiff"
+tiff_lib_dir="$CURR_DIR/vendor/tiff/lib"
+tiff_build_folder="tiff-$libtiff_version-build"
+
+download_url="https://download.osgeo.org/libtiff/tiff-$libtiff_version.tar.gz"
+# git_url="https://gitlab.com/libtiff/libtiff.git libtiff-$libtiff_version"
+
+rm -rf $tiff_dir/*
+mkdir -p $tiff_dir && cd $tiff_dir
+# git clone $git_url
+# cd libtiff*
+# git checkout tags/$libtiff_version
+
+wget -c $download_url -O - | tar -zxf-
+cd tiff*
+
+lib_ext="so"
+
+os_type=${OSTYPE//[0-9.-]*/}
+if [[ "$os_type" == 'darwin' ]]; then
+   lib_ext='dylib'
+elif [[ "$os_type" == 'linux' ]]; then
+   lib_ext='so'
+fi
+# lib extentions
+
+jpeg_dir="$CURR_DIR/vendor/jpeg"
+jpeg_lib_dir="$jpeg_dir/lib/liblibjpeg.$lib_ext"
+jpeg_include_dir="$jpeg_dir/include"
+
+png_dir="$CURR_DIR/vendor/png"
+png_lib_dir="$png_dir/lib/libpng16.$lib_ext"
+png_include_dir="$png_dir/include/libpng16"
+
+webp_dir="$CURR_DIR/vendor/webp"
+webp_lib_dir="$webp_dir/lib/libwebp.$lib_ext"
+webpmux_lib_dir="$webp_dir/lib/libwebpmux.$lib_ext"
+webp_include_dir="$webp_dir/include"
+
+zlib_dir="$CURR_DIR/vendor/zlib"
+zlib_lib_dir="$zlib_dir/lib/libz.$lib_ext"
+zlib_include_dir="$zlib_dir/include"
+
+mkdir tiff_build_folder && cd tiff_build_folder && cmake -DCMAKE_INSTALL_PREFIX=$tiff_dir \
+    -DCMAKE_BUILD_TYPE="Release" \
+    -DJPEG_LIBRARY_RELEASE=$jpeg_lib_dir -DJPEG_LIBRARY=$jpeg_lib_dir -DJPEG_INCLUDE_DIR=$jpeg_include_dir -DHAVE_JPEG=yes \
+    -DPNG_LIBRARY_RELEASE=$png_lib_dir -DPNG_LIBRARY=$png_lib_dir -DPNG_INCLUDE_DIR=$png_include_dir -DPNG_PNG_INCLUDE_DIR=$png_include_dir -DHAVE_PNG=yes \
+    -DWebP_LIBRARY_RELEASE=$webp_lib_dir -DWebP_LIBRARY=$webp_lib_dir  -DWebP_INCLUDE_DIR=$webp_include_dir -DHAVE_WEBP=yes \
+    -DZLIB_LIBRARY_RELEASE=$zlib_lib_dir -DZLIB_LIBRARY=$zlib_lib_dir -DZLIB_INCLUDE_DIR=$zlib_include_dir -DHAVE_ZLIB=yes \
+    -DHAVE_OPENGL=no \
+    -DBUILD_SHARED_LIBS=ON  ../
+
+make
+make install
+

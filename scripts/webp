@@ -1,0 +1,62 @@
+#!/bin/bash
+
+libwebp_version=1.2.1
+export CURR_DIR=$(pwd)
+webp_dir="$CURR_DIR/vendor/webp"
+webp_lib_dir="$CURR_DIR/vendor/webp/lib"
+
+# https://boostorg.jfrog.io/native/main/release/1.77.0/source/boost_1_77_0.tar.gz
+# https://boostorg.jfrog.io/artifactory/main/release/1.77.0/source/boost_1_77_0.tar.gz
+# lib extentions
+lib_ext="so"
+
+os_type=${OSTYPE//[0-9.-]*/}
+if [[ "$os_type" == 'darwin' ]]; then
+   lib_ext='dylib'
+elif [[ "$os_type" == 'linux' ]]; then
+   lib_ext='so'
+fi
+# lib extentions
+jpeg_dir="$CURR_DIR/vendor/jpeg"
+jpeg_lib_dir="$jpeg_dir/lib/liblibjpeg.$lib_ext"
+jpeg_include_dir="$jpeg_dir/include"
+
+png_dir="$CURR_DIR/vendor/png"
+png_lib_dir="$png_dir/lib/libpng16.$lib_ext"
+png_include_dir="$png_dir/include/libpng16"
+
+zlib_dir="$CURR_DIR/vendor/zlib"
+zlib_lib_dir="$zlib_dir/lib/libz.$lib_ext"
+zlib_include_dir="$zlib_dir/include"
+
+# download_url="https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-$libwebp_version.tar.gz"
+git_url="https://github.com/webmproject/libwebp.git libwebp-$libwebp_version"
+
+rm -rf $webp_dir/*
+mkdir -p $webp_dir && cd $webp_dir
+# curl -L $download_url | tar -zxf-
+git clone $git_url
+cd libwebp*
+
+# ./configure \
+#     --prefix=$webp_dir \
+#     --disable-static \
+#     --enable-shared \
+#     --enable-swap-16bit-csp
+
+mkdir build && cd build && cmake -DWEBP_BUILD_EXTRAS=ON -DCMAKE_INSTALL_PREFIX=$webp_dir \
+    -DCMAKE_BUILD_TYPE="Release" -DCMAKE_INSTALL_DATADIR=$webp_lib_dir -DCMAKE_INSTALL_LIBDIR=$webp_lib_dir \
+    -DJPEG_LIBRARY_RELEASE=$jpeg_lib_dir -DJPEG_LIBRARY=$jpeg_lib_dir -DJPEG_INCLUDE_DIR=$jpeg_include_dir -DWEBP_HAVE_JPEG=1 \
+    -DPNG_LIBRARY_RELEASE=$png_lib_dir -DPNG_LIBRARY=$png_lib_dir -DPNG_INCLUDE_DIR=$png_include_dir -DPNG_PNG_INCLUDE_DIR=$png_include_dir -DWEBP_HAVE_PNG=1 \
+    -DZLIB_LIBRARY_RELEASE=$zlib_lib_dir -DZLIB_LIBRARY=$zlib_lib_dir -DZLIB_INCLUDE_DIR=$zlib_include_dir -DHAVE_ZLIB=yes \
+    -DWEBP_ENABLE_SWAP_16BIT_CSP=ON -DWEBP_BUILD_CWEBP=ON -DWEBP_BUILD_DWEBP=OFF \
+    -DWEBP_BUILD_VWEBP=OFF -DWEBP_BUILD_WEBPINFO=OFF -DWEBP_BUILD_WEBPMUX=ON \
+    -DWEBP_BUILD_IMG2WEBP=ON -DBUILD_SHARED_LIBS=ON ../
+
+make
+make install
+
+config_file="$webp_lib_dir/WebP/cmake/WebPConfig.cmake"
+
+replacement="$webp_lib_dir;$webp_lib_dir/libwebpdecoder.$lib_ext;$webp_lib_dir/libwebp.$lib_ext;$webp_lib_dir/libwebpdemux.$lib_ext;$webp_lib_dir/libwebpmux.$lib_ext"
+sed -i.bak '34s%webpdecoder;webp;webpdemux;webpmux%'"$replacement"'%' $config_file

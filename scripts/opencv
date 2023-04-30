@@ -1,0 +1,32 @@
+#!/bin/bash
+
+export CURR_DIR=$(pwd)
+opencv_dir="$CURR_DIR/vendor/opencv"
+
+opencv_git_url="https://github.com/opencv/opencv.git"
+opencv_contrib_git_url="https://github.com/opencv/opencv_contrib.git"
+
+rm -rf $opencv_dir/*
+mkdir -p $opencv_dir && cd $opencv_dir
+git clone $opencv_git_url
+cd opencv
+git checkout tags/4.2.0
+cd ..
+
+git clone $opencv_contrib_git_url
+cd opencv_contrib
+git checkout tags/4.2.0
+cd ..
+
+mkdir install build_opencv
+cd build_opencv
+
+cmake -D CMAKE_BUILD_TYPE=RELEASE \
+      -D CMAKE_INSTALL_PREFIX=../install \
+      -D INSTALL_C_EXAMPLES=ON \
+      -D OPENCV_EXTRA_MODULES_PATH=../opencv_contrib/modules \
+      -D BUILD_EXAMPLES=ON ../opencv
+
+make
+make install
+

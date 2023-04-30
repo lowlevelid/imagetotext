@@ -1,0 +1,39 @@
+{
+	"info": {
+		"_postman_id": "801f1334-0f14-455f-b31e-1feb9d2b89dd",
+		"name": "imagetotext",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "543626"
+	},
+	"item": [
+		{
+			"name": "scan text from image",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/wuriyanto/Pictures/Capture.PNG"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:9010/scan",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9010",
+					"path": [
+						"scan"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
