@@ -2,6 +2,8 @@
 
 #### ***runs and compiles fine using Ubuntu 20 and gcc 10***
 
+[![imagetotext CI](https://github.com/lowlevelid/imagetotext/actions/workflows/ci.yml/badge.svg)](https://github.com/lowlevelid/imagetotext/actions/workflows/ci.yml)
+
 ### Requirements
 - C and C++ compiler, gcc https://gcc.gnu.org/install/binaries.html or other compilers
 - Nodejs https://nodejs.org/en/download/
