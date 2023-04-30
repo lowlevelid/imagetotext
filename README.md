@@ -1,5 +1,6 @@
 ## Image to Text as a service written in C++ and Javascript (NodeJs) Running on top of Node Addon Api, Tesseract and OpenCV
 
+#### ***runs and compiles fine using Ubuntu 20 and gcc 10***
 
 ### Requirements
 - C and C++ compiler, gcc https://gcc.gnu.org/install/binaries.html or other compilers
