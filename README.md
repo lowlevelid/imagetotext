@@ -1,4 +1,4 @@
-## Image to Text as a service written in C++ and Javascript (NodeJs) Running on top of Tesseract and OpenCV
+## Image to Text as a service written in C++ and Javascript (NodeJs) Running on top of Node Addon Api, Tesseract and OpenCV
 
 
 ### Requirements
